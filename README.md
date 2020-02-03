@@ -22,9 +22,6 @@ The following are details about the environment and rewards for various elements
 |Deep Pit|Fixed|4|-100|
 |Treasure|Fixed|1|+100|
 
-
-### Maze Environment Start State
-
 |Element|Grid Color|
 |:---:|:---:|
 |Treasure|Green|
