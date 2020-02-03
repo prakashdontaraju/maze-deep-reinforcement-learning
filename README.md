@@ -25,12 +25,14 @@ The following are details about the environment and rewards for various elements
 
 ### Maze Environment Start State
 
+|Element|Grid Color|
+|:---:|:---:|
 |Treasure|Green|
 |Wall|Navy Blue|
 |Shallow Pit|Yellow|
 |Deep Pit|Red|
 
-![alt text](https://github.com/prakashdontaraju/maze-deep-reinforcement-learning/maze-deep-q-learning/maze-grid.png)
+![alt text](https://github.com/prakashdontaraju/maze-deep-reinforcement-learning/blob/master/maze-deep-q-learning/maze-grid.PNG)
 
 
 
