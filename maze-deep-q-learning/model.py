@@ -1,16 +1,18 @@
-import time
-import cv2 as cv
 import numpy as np
-import gamegrid as env
 from queue import deque
-import tensorflow as tf
 from random import randint
-from memory import Memory
-from DQNetwork import DQNetwork
+import time
+
+import cv2 as cv
 import statistics as stats
+import tensorflow as tf
+
+import gamegrid as env
+from DQNetwork import DQNetwork
+from memory import Memory
 
 def create_environment():
-    """creates a gamegrid environment"""
+    """Creates a gamegrid environment"""
 
     game = env.GameGrid(20)
 
@@ -19,33 +21,36 @@ def create_environment():
     left = [0, 0, 1, 0]
     right = [0, 0, 0, 1]
 
-
     possible_actions = [up, down, left, right]
     return game, possible_actions
-#print(environment.preprocess_frame())
+    #print(environment.preprocess_frame())
 
-# cv.imshow('img',environment.frame)
-# cv.waitKey(0)
-# print(environment.perform_action(2))
-# cv.imshow('img',environment.frame)
-# cv.waitKey(0)
+    # cv.imshow('img',environment.frame)
+    # cv.waitKey(0)
+    # print(environment.perform_action(2))
+    # cv.imshow('img',environment.frame)
+    # cv.waitKey(0)
 
 game, possible_actions = create_environment()
 
 stack_size = 4 # We stack 4 frames
 
 # Initialize deque with zero-images one array for each image
-stacked_frames  =  deque([np.zeros((84,84), dtype=np.int) for i in range(stack_size)], maxlen=4)
+stacked_frames = deque(
+    [np.zeros((84,84), dtype=np.int) for i in range(stack_size)], maxlen=4)
+
 
 def  stack_frames(stacked_frames, state, is_new_episode):
-    """stacks the frames"""
+    """Stacks the frames"""
 
     # Preprocess frame
     frame = game.preprocess_frame(state)
 
     if is_new_episode:
         # Clear our stacked_frames
-        stacked_frames = deque([np.zeros((84,84), dtype=np.int) for i in range(stack_size)], maxlen=4)
+        stacked_frames = deque(
+            [np.zeros((84,84), dtype=np.int) for i in range(stack_size)],
+            maxlen=4)
 
         # in a new episode, copy the same frame 4x
         stacked_frames.append(frame)
@@ -67,8 +72,9 @@ def  stack_frames(stacked_frames, state, is_new_episode):
 
 # setting hyperparameters for training the model
 # Model Hyperparameters
-state_size = [84,84,4]      # Our input is a stack of 4 frames hence 84x84x4 (Width, height, channels)
-action_size = 4              # 4 possible actions: up, down, left, right
+# input - 4 stack frames: 84x84x4 (Width, height, channels)
+state_size = [84,84,4]
+action_size = 4             # 4 possible actions: up, down, left, right
 learning_rate =  0.002      # learning rate
 
 # Training Hyperparameters
@@ -85,12 +91,13 @@ decay_rate = 0.0001            # exponential decay rate for exploration prob
 gamma = 0.95               # Discounting rate
 
 # Memory Hyperparameters
-pretrain_length = 5000   # Number of experiences stored in the Memory when initialized for the first time
-memory_size = 25000          # Number of experiences the Memory can keep
+# Number of experiences stored in the Memory when initialized for the first time
+pretrain_length = 5000
+# Number of experiences the Memory can keep
+memory_size = 25000
 
 # Flag for if training needs to be done
 training = False
-
 
 tf.reset_default_graph()
 
@@ -139,7 +146,8 @@ for i in range(pretrain_length):
     else:
         # Get next state
         next_state, color_frame = game.createImage()
-        next_state, stacked_frames = stack_frames(stacked_frames, next_state, False)
+        next_state, stacked_frames = stack_frames(
+            stacked_frames, next_state, False)
 
         # Add experience to memory
         memory.add((state, action, reward, next_state, terminal))
@@ -157,9 +165,10 @@ tf.summary.scalar("Loss", DQNetwork.loss)
 write_op = tf.summary.merge_all()
 
 
-
-def predict_action(explore_start, explore_stop, decay_rate, decay_step, state, actions):
-    """With probablity ϵ select a random action, otherwise selectbest action - argmaxQ(state, action)"""
+def predict_action(
+    explore_start, explore_stop, decay_rate, decay_step, state, actions):
+    """With probablity ϵ select a random action,
+    otherwise select best action - argmaxQ(state, action)"""
 
     # Epsilon greedy strategy
     # Choose action a from state s using epsilon greedy.
@@ -177,7 +186,9 @@ def predict_action(explore_start, explore_stop, decay_rate, decay_step, state, a
     else:
         # Get action from Q-network (exploitation)
         # Estimate the Qs values state
-        Qs = sess.run(DQNetwork.output, feed_dict = {DQNetwork.inputs_: state.reshape((1, *state.shape))})
+        Qs = sess.run(
+            DQNetwork.output, feed_dict = {
+                DQNetwork.inputs_: state.reshape((1, *state.shape))})
 
         # Take the biggest Q value (= the best action)
         choice = np.argmax(Qs)
@@ -186,9 +197,8 @@ def predict_action(explore_start, explore_stop, decay_rate, decay_step, state, a
     return action, explore_probability
 
 
-
 def display(start, action_stack):
-    """display series of frames of player taking actions"""
+    """Display series of frames of player taking actions"""
 
     game, possible_actions = create_environment()
     game.reset()
@@ -207,10 +217,8 @@ def display(start, action_stack):
         cv.imshow('Maze', cv.resize(color_frame,(500,500)))
         cv.waitKey(50)
 
-
 # save model
 saver = tf.train.Saver()
-
 
 if training == True:
     with tf.Session() as sess:
@@ -240,7 +248,7 @@ if training == True:
             game.reset()
             state, color_frame = game.createImage()
 
-            # Remember that stack frame function also call our preprocess function.
+            # Stack frame function also calls preprocess function
             state, stacked_frames = stack_frames(stacked_frames, state, True)
 
             while step < max_steps:
@@ -250,11 +258,12 @@ if training == True:
                 decay_step +=1
 
                 # Predict the action to take and take it
-                action, explore_probability = predict_action(explore_start, explore_stop, decay_rate, decay_step, state, possible_actions)
+                action, explore_probability = predict_action(
+                    explore_start, explore_stop, decay_rate,
+                    decay_step, state, possible_actions)
 
                 # Do the action
                 terminal, reward = game.perform_action(action)
-
 
                 # Add the reward to total reward
                 episode_rewards.append(reward)
@@ -264,7 +273,8 @@ if training == True:
                 if terminal:
                     # the episode ends so no next state
                     next_state = np.zeros((84,84), dtype=np.int)
-                    next_state, stacked_frames = stack_frames(stacked_frames, next_state, False)
+                    next_state, stacked_frames = stack_frames(
+                        stacked_frames, next_state, False)
 
                     # Set step = max_steps to end the episode
                     step = max_steps
@@ -284,7 +294,8 @@ if training == True:
                     next_state, color_frame = game.createImage()
 
                     # Stack frame of the next_state
-                    next_state, stacked_frames = stack_frames(stacked_frames, next_state, False)
+                    next_state, stacked_frames = stack_frames(
+                        stacked_frames, next_state, False)
 
 
                     # Add experience to memory
@@ -305,9 +316,11 @@ if training == True:
                 target_Qs_batch = []
 
                 # Get Q values for next_state
-                Qs_next_state = sess.run(DQNetwork.output, feed_dict = {DQNetwork.inputs_: next_states_mb})
+                Qs_next_state = sess.run(DQNetwork.output, feed_dict = {
+                    DQNetwork.inputs_: next_states_mb})
 
-                # Set Q_target = r if the episode ends at s+1, otherwise set Q_target = r + gamma*maxQ(s', a')
+                # Set Q_target = r if the episode ends at s+1,
+                # otherwise set Q_target = r + gamma*maxQ(s', a')
                 for i in range(0, len(batch)):
                     terminal = dones_mb[i]
 
@@ -316,9 +329,9 @@ if training == True:
                         target_Qs_batch.append(rewards_mb[i])
 
                     else:
-                        target = rewards_mb[i] + gamma * np.max(Qs_next_state[i])
+                        target = rewards_mb[i] + gamma * np.max(
+                            Qs_next_state[i])
                         target_Qs_batch.append(target)
-
 
                 targets_mb = np.array([each for each in target_Qs_batch])
 
@@ -327,18 +340,18 @@ if training == True:
                                                DQNetwork.target_Q: targets_mb,
                                                DQNetwork.actions_: actions_mb})
 
-#                 print('Episode: {}'.format(episode),
-#                               'Total reward: {}'.format(total_reward),
-#                               'Training loss: {:.4f}'.format(loss),
-#                               'Explore P: {:.4f}'.format(explore_probability))
+                # print('Episode: {}'.format(episode),
+                #               'Total reward: {}'.format(total_reward),
+                #               'Training loss: {:.4f}'.format(loss),
+                #               'Explore P: {:.4f}'.format(explore_probability))
 
                 # Write TF Summaries
-                summary = sess.run(write_op, feed_dict={DQNetwork.inputs_: states_mb,
-                                                   DQNetwork.target_Q: targets_mb,
-                                                   DQNetwork.actions_: actions_mb})
+                summary = sess.run(
+                    write_op, feed_dict={DQNetwork.inputs_: states_mb,
+                    DQNetwork.target_Q: targets_mb,
+                    DQNetwork.actions_: actions_mb})
                 writer.add_summary(summary, episode)
                 writer.flush()
-
 
             if (episode%25==0):
 
@@ -352,18 +365,15 @@ if training == True:
                 # print('Loss is '+str(loss))
                 loss_statistics.append(loss)
 
-
             # Save model every 5 episodes
             if episode % 5 == 0:
                 save_path = saver.save(sess, "./models/model.ckpt")
                 print("Model Saved")
     
-    
     print('Training Statistics')
-    stats.showLossStatistics(episode_statistics, loss_statistics)
-    stats.showRewardStatistics(episode_statistics, rewards_statistics)
-    
-    
+    stats.show_loss_statistics(episode_statistics, loss_statistics)
+    stats.show_reward_statistics(episode_statistics, rewards_statistics)
+       
 else:
 
     with tf.Session() as sess:
@@ -389,7 +399,10 @@ else:
 
             while not terminal and step < 500:
                 # Take the biggest Q value (= the best action)
-                Qs = sess.run(DQNetwork.output, feed_dict={DQNetwork.inputs_: state.reshape((1, *state.shape))})
+                Qs = sess.run(
+                    DQNetwork.output,
+                    feed_dict={DQNetwork.inputs_: state.reshape(
+                        (1, *state.shape))})
 
                 # Take the biggest Q value (= the best action)
                 choice = np.argmax(Qs)
@@ -413,7 +426,8 @@ else:
                 else:
                     # print("Not reached goal " + str(totalScore))
                     next_state, color_frame = game.createImage()
-                    next_state, stacked_frames = stack_frames(stacked_frames, next_state, False)
+                    next_state, stacked_frames = stack_frames(
+                        stacked_frames, next_state, False)
                     state = next_state
                     #cv.imshow('img', cv.resize(stacked_frames[3],(500,500)))
                     #time.sleep(5)
@@ -421,8 +435,6 @@ else:
 
             score = totalScore
             print("Score: ", score)
-            print("Terminal: ", success, " Rate :", success/50.0)
-
-            
+            print("Terminal: ", success, " Rate :", success/50.0)          
 
         del game

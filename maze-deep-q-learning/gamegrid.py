@@ -1,16 +1,15 @@
 import numpy as np
+from numpy import argmax
 import os
 from random import randint
 import cv2 as cv
-from numpy import argmax
-
 
 
 class GameGrid(object):
-    """sets up the environment"""
+    """Sets up the environment"""
 
     def __init__(self, field_size):
-        """initializes the environment"""
+        """Initializes the environment"""
 
         self.field_size = field_size
         # self.total_walls = 2*self.field_size
@@ -18,10 +17,8 @@ class GameGrid(object):
         # self.total_shallowpits = self.field_size/10
         self.reset()
 
-
     def reset(self):
-        """resets the environment"""
-
+        """Resets the environment"""
 
         self.player = (0,0)
         self.deep_pits = [(0,0)]
@@ -29,22 +26,18 @@ class GameGrid(object):
         self.walls = [(0,0)]
         self.goal = (0,0)
 
-
         self.init_grid()
         #self.createImage()
         #self.setup_grid()
         #return self.state
 
-
     def init_grid(self):
-
-        """initializes elements in the environment"""
+        """Initializes elements in the environment"""
 
         # goal --> top right of grid
         # (x,y) coordinates based on numpy 2d array indexing
 
         self.goal = [(0,self.field_size-1)]
-
         self.walls = self.assign_walls()
         self.deep_pits, self.shallow_pits = self.assign_pits()
         #self.pellet = self.assign_pellet()
@@ -53,23 +46,30 @@ class GameGrid(object):
         self.timer = 0
         self.power = False
 
-
     def assign_walls(self):
-        """assigns walls on the grid"""
+        """Assigns walls on the grid"""
 
         # (x,y) coordinates based on numpy 2d array indexing
-        self.walls = [(3,0),(6,0),(1,1),(2,1),(3,1),(6,1),(7,1),(8,1),(15,1),(3,2),(6,2),(9,2),(15,2),(16,2),(17,2),
-                            (6,3),(9,3),(10,3),(11,3),(15,3),(4,4),(5,4),(6,4),(9,4),(15,4),(6,5),(12,5),(13,5),(14,5),(15,5),(4,6),
-                            (10,6),(11,6),(12,6),(15,6),(4,7),(5,7),(6,7),(12,7),(4,8),(4,9),(8,9),(11,9),(18,9),(3,10),(4,10),(5,10),
-                            (6,10),(8,10),(9,10),(10,10),(11,10),(12,10),(13,10),(16,10),(17,10),(18,10),(1,11),(2,11),(3,11),(4,11),
-                            (8,11),(11,11),(18,11),(3,12),(11,12),(6,13),(11,13),(12,13),(13,13),(4,14),(5,14),(6,14),(11,14),(6,15),
-                            (17,15),(2,16),(7,16),(10,16),(17,16),(18,16),(19,16),(2,17),(3,17),(4,17),(5,17),(6,17),(7,17),(8,17),(9,17),
-                            (10,17),(15,17),(17,17),(2,18),(7,18),(10,18),(13,18),(14,18),(15,18),(15,19)]
+        self.walls = [(3,0),(6,0),(1,1),(2,1),(3,1),(6,1),(7,1),(8,1),
+                        (15,1),(3,2),(6,2),(9,2),(15,2),(16,2),(17,2),
+                        (6,3),(9,3),(10,3),(11,3),(15,3),(4,4),(5,4),
+                        (6,4),(9,4),(15,4),(6,5),(12,5),(13,5),(14,5),
+                        (15,5),(4,6),(10,6),(11,6),(12,6),(15,6),(4,7),
+                        (5,7),(6,7),(12,7),(4,8),(4,9),(8,9),(11,9),(18,9),
+                        (3,10),(4,10),(5,10),(6,10),(8,10),(9,10),(10,10),
+                        (11,10),(12,10),(13,10),(16,10),(17,10),(18,10),
+                        (1,11),(2,11),(3,11),(4,11),(8,11),(11,11),(18,11),
+                        (3,12),(11,12),(6,13),(11,13),(12,13),(13,13),(4,14),
+                        (5,14),(6,14),(11,14),(6,15),(17,15),(2,16),(7,16),
+                        (10,16),(17,16),(18,16),(19,16),(2,17),(3,17),(4,17),
+                        (5,17),(6,17),(7,17),(8,17),(9,17),(10,17),(15,17),
+                        (17,17),(2,18),(7,18),(10,18),(13,18),(14,18),(15,18),
+                        (15,19)]
 
         return self.walls
 
     def assign_pits(self):
-        """assigns pits on the grid"""
+        """Assigns pits on the grid"""
 
         # (x,y) coordinates in a regular x,y plane
         # self.deep_pits = [(9,19),(19,11)]
@@ -81,9 +81,8 @@ class GameGrid(object):
 
         return self.deep_pits, self.shallow_pits
 
-
     def setup_grid(self):
-        """sets up elements in the environment"""
+        """Sets up elements in the environment"""
 
         # Player = 1
         # Wall = 2
@@ -92,7 +91,6 @@ class GameGrid(object):
         # Goal = 5
 
         self.grid = np.zeros((self.field_size, self.field_size))
-
 
         for goal_position in self.goal:
             self.grid[goal_position[0], goal_position[1]] = 5
@@ -109,9 +107,8 @@ class GameGrid(object):
         return self.grid
 
 
-
     def player_start_position(self):
-        """randomizes the start position of player in each episode"""
+        """Randomizes the start position of player in each episode"""
 
         invalidStartPosition = True
         while invalidStartPosition:
@@ -128,15 +125,12 @@ class GameGrid(object):
         self.player_start = self.player
         self.grid[self.player[0], self.player[1]] = 1
 
-
-
     def update_player(self):
-        """updates player position in the environment"""
+        """Updates player position in the environment"""
         self.grid[self.player[0], self.player[1]] = 1
 
-
     def createImage(self):
-        """creates image of environment state"""
+        """Creates image of environment state"""
 
         if not os.path.exists(os.path.join(os.getcwd(),'grid.jpg')):
 
@@ -146,7 +140,6 @@ class GameGrid(object):
             grid_img[:,:,1] = np.ones([200,200])*255
             grid_img[:,:,2] = np.ones([200,200])*255
 
-
             cv.imwrite('grid.jpg',grid_img)
 
         img = cv.imread('grid.jpg')
@@ -155,20 +148,33 @@ class GameGrid(object):
             for j in range(20):
 
                 if self.grid[i,j] == 0:
-                    cv.rectangle(img, (j*10,i*10), (j*10 +10 ,i*10 +10), (255,178,102), thickness= -1)
+                    cv.rectangle(
+                        img, (j*10,i*10), (j*10 +10 ,i*10 +10), (255,178,102),
+                        thickness= -1)
                 if self.grid[i,j] == 1:
-                    cv.rectangle(img, (j*10,i*10), (j*10 +10 ,i*10 +10), (0,255,255), thickness= -1)
+                    cv.rectangle(
+                        img, (j*10,i*10), (j*10 +10 ,i*10 +10), (0,255,255),
+                        thickness= -1)
                 if self.grid[i,j] == 2:
-                    cv.rectangle(img, (j*10,i*10), (j*10 +10 ,i*10 +10), (153,0,0), thickness= -1)
+                    cv.rectangle(
+                        img, (j*10,i*10), (j*10 +10 ,i*10 +10), (153,0,0),
+                        thickness= -1)
                 if self.grid[i,j] == 3:
-                    cv.rectangle(img, (j*10,i*10), (j*10 +10 ,i*10 +10), (51,153,255), thickness= -1)
+                    cv.rectangle(
+                        img, (j*10,i*10), (j*10 +10 ,i*10 +10), (51,153,255),
+                        thickness= -1)
                 if self.grid[i,j] == 4:
-                    cv.rectangle(img, (j*10,i*10), (j*10 +10 ,i*10 +10), (0,0,255), thickness= -1)
+                    cv.rectangle(
+                        img, (j*10,i*10), (j*10 +10 ,i*10 +10), (0,0,255),
+                        thickness= -1)
                 if self.grid[i,j] == 5:
-                    cv.rectangle(img, (j*10,i*10), (j*10 +10 ,i*10 +10), (0,204,0 ), thickness= -1)
+                    cv.rectangle(
+                        img, (j*10,i*10), (j*10 +10 ,i*10 +10), (0,204,0 ),
+                        thickness= -1)
                 if self.grid[i,j] == 6:
-                    cv.rectangle(img, (j*10,i*10), (j*10 +10 ,i*10 +10), (255,255,255 ), thickness= -1)
-
+                    cv.rectangle(
+                        img, (j*10,i*10), (j*10 +10 ,i*10 +10), (255,255,255 ),
+                        thickness= -1)
 
         color_frame = cv.resize(img, (200,200))
         grayscale_frame = cv.cvtColor(img, cv.COLOR_BGR2GRAY)
@@ -178,10 +184,8 @@ class GameGrid(object):
         #cv.waitKey(0)
         return grayscale_frame, color_frame
 
-
     def preprocess_frame(self,frame):
-        """normalizes pixels of the image and resizes it"""
-
+        """Normalizes pixels of the image and resizes it"""
 
 #         cv.imshow('img',frame_gray)
 #         cv.waitKey(0)
@@ -194,10 +198,8 @@ class GameGrid(object):
 
         return preprocessed_frame
 
-
-
     def perform_action(self, command):
-        """player performs action in the environment"""
+        """Player performs action in the environment"""
 
         action = np.argmax(command)
         old_loc = self.player
@@ -230,22 +232,25 @@ class GameGrid(object):
             else :
                 self.player = old_loc
 
-
-        if self.player in self.deep_pits: # player walked into a deep pit, end episode
+        # player walked into a deep pit, end episode
+        if self.player in self.deep_pits:
             reward = -100
             terminal = True
 
-
-        elif self.player in self.shallow_pits: # player walked into a shallow pit
+        # player walked into a shallow pit
+        elif self.player in self.shallow_pits:
             reward = -0.3
             terminal = False
 
-        elif self.player in self.goal: # player walked into goal, end episode
+        # player walked into goal, end episode
+        elif self.player in self.goal:
             reward = 100
             terminal = True
 
-        elif self.player in self.walls: # player walked into a wall
-            self.player = old_loc  # player did not move
+        # player walked into a wall
+        elif self.player in self.walls:
+            # player did not move
+            self.player = old_loc
             reward = -0.2
             terminal = False
 

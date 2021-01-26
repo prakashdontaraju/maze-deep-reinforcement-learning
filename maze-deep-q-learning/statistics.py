@@ -1,7 +1,7 @@
-import numpy as np
 import matplotlib.pyplot as plt
+import numpy as np
 
-def showLossStatistics(episode_statistics,loss_statistics):
+def show_loss_statistics(episode_statistics,loss_statistics):
     
     episodes = episode_statistics
     # print(episodes)
@@ -21,7 +21,7 @@ def showLossStatistics(episode_statistics,loss_statistics):
     plt.title(title)
     plt.show()
 
-def showRewardStatistics(episode_statistics, rewards_statistics) :
+def show_reward_statistics(episode_statistics, rewards_statistics) :
     
     episodes = episode_statistics
     # print(episodes)

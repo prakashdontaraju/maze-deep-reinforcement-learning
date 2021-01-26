@@ -2,18 +2,18 @@ import numpy as np
 from queue import deque
 
 class Memory():
-    """sets up the memory element"""
+    """Sets up the memory element"""
 
     def __init__(self, max_size):
-        """initializes the memory element"""
+        """Initializes the memory element"""
         self.buffer = deque(maxlen = max_size)
 
     def add(self, experience):
-        """adds player experience to the memory element"""
+        """Adds player experience to the memory element"""
         self.buffer.append(experience)
 
     def sample(self, batch_size):
-        """collects player experience from the memory element"""
+        """Collects player experience from the memory element"""
 
         buffer_size = len(self.buffer)
         index = np.random.choice(np.arange(buffer_size),
