@@ -1,11 +1,13 @@
 # maze-deep-reinforcement-learning
 
-Deep Reinforcement Q Learning (Maze) involves a player at a random starting location on a 20 X 20 environment (grid) trying to find the treasure at a fixed location on the grid.
+## Business Case
+
+To train a player starting from a random location in a Maze to find the treasure at a fixed location using Deep Reinforcement Q Learning
 
 
 ## Environment
 
-There are multiple obstacles on the grid that the player cannot enter such as walls. However, the player can enter pits with mixed results because of the nature of the pits.
+There are multiple obstacles on the grid (20 X 20 environment) that the player cannot enter such as walls. However, the player can enter pits with mixed results because of the nature of the pits.
 
 Pits can be of 2 kinds:
 
@@ -80,7 +82,7 @@ Learn the optimal policy to find the treasure on the grid with reasonable accura
   - Frames (images) from start to end are displayed when player reaches terminal state in an episode
 
 
-## Prerequisites
+### Prerequisites
 
 What are the tools you need to install?
 
@@ -96,7 +98,7 @@ Text Editor       VS Code or any other
 ```
 
 
-## Deployment
+### Deployment
 
 By following the prerequisites and process, you'll be able to deploy our project, train the neural network and find the treasure consistently.
 
@@ -104,4 +106,4 @@ By following the prerequisites and process, you'll be able to deploy our project
 ## Authors
 
 **Prakash Dontaraju** [LinkedIn](https://www.linkedin.com/in/prakashdontaraju) [Twitter](https://twitter.com/WittyGrit) [Medium](https://medium.com/@wittygrit)
-* **Nikhil G** [LinkedIn](https://www.linkedin.com/in/nikhil-g-95861bb7)
+**Nikhil G** [LinkedIn](https://www.linkedin.com/in/nikhil-g-95861bb7)
