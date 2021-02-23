@@ -4,8 +4,19 @@
 
 To train a player starting from a random location in a Maze to find the treasure at a fixed location using Deep Reinforcement Q Learning
 
+### Objective
 
-## Environment
+Train the player to choose actions by utilizing a Neural Network to predict Q-values for each state so as to find the treasure within the grid
+
+
+## Implementation
+
+By informing the fixed locations of treasure, walls and pits as inputs, the neural network will be trained to estimate the Q-values of all possible states.
+
+Learn the optimal policy to find the treasure on the grid with reasonable accuracy from a randomized location
+
+
+### Environment
 
 There are multiple obstacles on the grid (20 X 20 environment) that the player cannot enter such as walls. However, the player can enter pits with mixed results because of the nature of the pits.
 
@@ -13,6 +24,7 @@ Pits can be of 2 kinds:
 
 * *Shallow pit* - player can immediately escape with some negative reward
 * *Deep pit*    - player cannot escape and the hunt for treasure is over
+
 
 The following are details about the environment and rewards for various elements:
 
@@ -34,14 +46,21 @@ The following are details about the environment and rewards for various elements
 ![alt text](https://github.com/prakashdontaraju/maze-deep-reinforcement-learning/blob/master/maze-deep-q-learning/maze-grid.PNG)
 
 
+### Prerequisites
 
-## Objective
+What are the tools you need to install?
 
-Train the player to choose actions by utilizing a Neural Network to predict Q-values for each state so as to find the treasure within the grid
+```
+You must have administrator access to install the following:
 
-By informing the fixed locations of treasure, walls and pits as inputs, the neural network will be trained to estimate the Q-values of all possible states.
+TensorFlow        TensorFlow 1.12
+Python            3.7.3 or newer
+CUDA              CUDA 10.0
+cuDNN             cuDNN 7.6.0
+Python Libraries  OpenCV-Python, numpy, matplotlib
+Text Editor       VS Code or any other
+```
 
-Learn the optimal policy to find the treasure on the grid with reasonable accuracy from a randomized location
 
 
 ## Process
@@ -82,21 +101,6 @@ Learn the optimal policy to find the treasure on the grid with reasonable accura
   - Frames (images) from start to end are displayed when player reaches terminal state in an episode
 
 
-### Prerequisites
-
-What are the tools you need to install?
-
-```
-You must have administrator access to install the following:
-
-TensorFlow        TensorFlow 1.12
-Python            3.7.3 or newer
-CUDA              CUDA 10.0
-cuDNN             cuDNN 7.6.0
-Python Libraries  OpenCV-Python, numpy, matplotlib
-Text Editor       VS Code or any other
-```
-
 
 ### Deployment
 
@@ -106,4 +110,5 @@ By following the prerequisites and process, you'll be able to deploy our project
 ## Authors
 
 **Prakash Dontaraju** [LinkedIn](https://www.linkedin.com/in/prakashdontaraju) [Twitter](https://twitter.com/WittyGrit) [Medium](https://medium.com/@wittygrit)
+
 **Nikhil G** [LinkedIn](https://www.linkedin.com/in/nikhil-g-95861bb7)
