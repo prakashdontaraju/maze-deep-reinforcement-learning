@@ -103,5 +103,5 @@ By following the prerequisites and process, you'll be able to deploy our project
 
 ## Authors
 
-* **Prakash Dontaraju** [LinkedIn](https://www.linkedin.com/in/prakashdontaraju) [Medium](https://medium.com/@wittygrit)
+**Prakash Dontaraju** [LinkedIn](https://www.linkedin.com/in/prakashdontaraju) [Twitter](https://twitter.com/WittyGrit) [Medium](https://medium.com/@wittygrit)
 * **Nikhil G** [LinkedIn](https://www.linkedin.com/in/nikhil-g-95861bb7)
