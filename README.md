@@ -1,4 +1,4 @@
-# maze-deep-reinforcement-learning
+# 1 Way to Easily Beat the Maze with Reinforcement Learning
 
 ## Business Case
 
